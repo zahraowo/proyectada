@@ -1,0 +1,730 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Escuela Villafañe | Panel institucional</title>
+<link href="proyectico.css" rel="stylesheet"/>
+</head>
+<body>
+<section class="auth-view" id="authView">
+<div class="auth-intro">
+<div class="brand">
+<span class="brand-mark">+</span>
+Escuela Villafañe
+</div>
+<div class="intro-copy">
+<h1>
+Gestor de inventario
+</h1>
+<p>
+Organiza y consulta los materiales de la escuela.
+</p>
+</div>
+</div>
+<div class="auth-form-side">
+<div class="auth-card">
+<h2>
+Iniciar sesión
+</h2>
+<p>
+Elige tu rol e ingresa tu contraseña.
+</p>
+<form id="authForm">
+<label class="field">
+Rol de acceso
+<select id="role" required="">
+<option value="Administrador">
+Administrador
+</option>
+<option value="Supervisor">
+Supervisor
+</option>
+</select>
+</label>
+<label class="field">
+Contraseña
+<input autocomplete="current-password" id="password" placeholder="Escribe tu contraseña" required="" type="password"/>
+</label>
+<div aria-live="polite" class="message" id="message">
+</div>
+<button class="submit-btn" type="submit">
+Entrar al panel
+</button>
+</form>
+</div>
+</div>
+</section>
+<section class="app-view hidden" id="appView">
+<header class="topbar">
+<input aria-label="Periodo escolar, por ejemplo 2024 - 2025" class="cycle-input" id="schoolCycleInput" inputmode="numeric" maxlength="13" placeholder="2024 - 2025" type="text"/>
+<div class="user-area">
+<span class="user-name" id="userName">
+</span>
+<span class="avatar" id="avatar">
+</span>
+<button class="logout" id="logoutButton" type="button">
+Cerrar sesión
+</button>
+</div>
+</header>
+<aside class="app-sidebar">
+<div class="sidebar-menu">
+<nav aria-label="Secciones del panel" class="main-nav">
+<button class="nav-button active" data-view="inventoryView" type="button">
+▣  Inventario General
+</button>
+<button class="nav-button" data-view="agendaView" type="button">
+◷  Entradas y Lotes
+</button>
+</nav>
+</div>
+</aside>
+<main class="dashboard">
+<section class="view" id="inventoryView">
+<div class="welcome">
+<div class="welcome-copy">
+<h1>
+Inventario escolar
+</h1>
+</div>
+<button class="primary-button" id="addMaterialButton" type="button">
++  Añadir material
+</button>
+<div class="summary-grid">
+<article class="summary">
+<div class="summary-label">
+Artículos registrados
+</div>
+<div class="summary-value" id="materialCount">
+0
+</div>
+<div class="material-meta">
+En el catálogo
+</div>
+</article>
+<article class="summary accent">
+<div class="summary-label">
+Unidades totales
+</div>
+<div class="summary-value" id="unitCount">
+0
+</div>
+<div class="material-meta">
+En existencia
+</div>
+</article>
+<article class="summary">
+<div class="summary-label">
+Lotes registrados
+</div>
+<div class="summary-value" id="lotCount">
+0
+</div>
+<div class="material-meta">
+Llegadas de materiales
+</div>
+</article>
+</div>
+</div>
+<section aria-labelledby="categorySummaryTitle" class="category-summary panel">
+<div class="category-summary-heading">
+<h2 id="categorySummaryTitle">
+Materiales por categoría
+</h2>
+</div>
+<div class="category-counts" id="categoryCounts">
+</div>
+</section>
+<div class="inventory-toolbar">
+<span aria-hidden="true" class="search-icon">⌕</span>
+<input aria-label="Buscar materiales" class="search-input" id="searchInventory" placeholder="Buscar material o aula..." type="search"/>
+<button class="logout sort-label" id="sortInventory" type="button">
+Ordenar A–Z
+</button>
+<select aria-label="Filtrar por categoría" class="category-filter" id="categoryFilter">
+<option value="all">
+Todas las categorías
+</option>
+<option value="Papelería">
+📚 Papelería
+</option>
+<option value="Deportes">
+⚽ Deportes
+</option>
+<option value="Matemáticas y ciencias">
+🧮 Matemáticas y ciencias
+</option>
+<option value="Artes">
+🎨 Artes
+</option>
+<option value="Administración">
+📁 Administración
+</option>
+<option value="Aulas generales">
+🏫 Aulas generales
+</option>
+</select>
+</div>
+<article class="panel table-panel">
+<table class="inventory-table">
+<thead>
+<tr>
+<th>
+Material
+</th>
+<th>
+Categoría
+</th>
+<th>
+Disponibilidad
+</th>
+<th>
+Cantidad
+</th>
+</tr>
+</thead>
+<tbody id="inventoryBody">
+</tbody>
+</table>
+<div class="empty-state" id="emptyInventory">
+Aún no hay materiales registrados.
+</div>
+</article>
+</section>
+<section class="view hidden" id="agendaView">
+<div class="welcome">
+<div class="welcome-copy">
+<p class="eyebrow">
+Registro escolar
+</p>
+<h1>
+Entradas y lotes
+</h1>
+<p class="welcome-note">
+Registra cada llegada. Las cantidades de esta sección no se suman al inventario general.
+</p>
+</div>
+</div>
+<div class="inventory-layout">
+<article class="panel">
+<h2>
+Registrar llegada
+</h2>
+<form id="materialForm">
+<div class="form-grid">
+<label class="field full">
+Número de lote
+<input id="materialLot" placeholder="Ej. LOT-2026-001" required="" type="text"/>
+</label>
+<label class="field full">
+Fecha de llegada
+<input id="materialDate" required="" type="date"/>
+</label>
+<label class="field full">
+Observaciones
+<textarea class="notes-input" id="materialNotes" placeholder="Proveedor, ubicación u otros detalles"></textarea>
+</label>
+</div>
+<div class="material-list-heading">
+<h3>
+Materiales del lote
+</h3>
+<button class="secondary-button" id="addLotMaterial" type="button">
++ Añadir material
+</button>
+</div>
+<div class="material-rows" id="materialRows">
+</div>
+<div aria-live="polite" class="message" id="inventoryMessage">
+</div>
+<button class="submit-btn" type="submit">
+Guardar llegada
+</button>
+</form>
+</article>
+<article class="panel">
+<h2>
+Llegadas registradas
+</h2>
+<div class="entry-list" id="entryList">
+</div>
+<div class="empty-state" id="emptyEntries">
+Aún no hay llegadas registradas.
+</div>
+</article>
+</div>
+</section>
+</main>
+<dialog aria-labelledby="inventoryDialogTitle" class="inventory-dialog" id="inventoryDialog">
+<div class="dialog-heading">
+<h2 id="inventoryDialogTitle">
+Añadir al inventario general
+</h2>
+<button aria-label="Cerrar" class="dialog-close" id="closeInventoryDialog" type="button">
+×
+</button>
+</div>
+<p class="dialog-copy" id="inventoryDialogCopy">
+Se agregará directamente al inventario, sin crear un registro de llegada.
+</p>
+<form id="inventoryItemForm">
+<div class="form-grid">
+<label class="field">
+Material
+<input id="inventoryName" minlength="3" pattern="(?=(?:.*[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]){3})[A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]+" placeholder="Ej. Libro de lectura" required="" title="Usa al menos 3 letras; solo se permiten letras y espacios." type="text"/>
+</label>
+<label class="field">
+Categoría
+<select id="inventoryCategory" required="">
+<option disabled="" selected="" value="">
+Selecciona una categoría
+</option>
+<option value="Papelería">
+📚 Papelería
+</option>
+<option value="Deportes">
+⚽ Deportes
+</option>
+<option value="Matemáticas y ciencias">
+🧮 Matemáticas y ciencias
+</option>
+<option value="Artes">
+🎨 Artes
+</option>
+<option value="Administración">
+📁 Administración
+</option>
+<option value="Aulas generales">
+🏫 Aulas generales
+</option>
+</select>
+</label>
+<label class="field" id="inventoryQuantityField">
+Cantidad inicial
+<input id="inventoryQuantity" min="0" placeholder="0" required="" type="number"/>
+</label>
+</div>
+<div class="dialog-actions">
+<button class="logout" id="cancelInventoryDialog" type="button">
+Cancelar
+</button>
+<button class="primary-button" id="saveInventoryItem" type="submit">
+Agregar al inventario
+</button>
+</div>
+</form>
+</dialog>
+</section>
+<script>
+const SESSION_KEY = 'escuela_villafane_session';
+const INVENTORY_KEY = 'escuela_villafane_inventory';
+const LOTS_KEY = 'escuela_villafane_lot_records';
+const SCHOOL_CYCLE_KEY = 'escuela_villafane_school_cycle';
+const CATEGORY_ICONS = {
+'Papelería': '📚',
+'Deportes': '⚽',
+'Matemáticas y ciencias': '🧮',
+'Artes': '🎨',
+'Administración': '📁',
+'Aulas generales': '🏫'
+};
+const CATEGORY_ORDER = Object.keys(CATEGORY_ICONS);
+const CATEGORY_NAMES = {
+papeleria: 'Papelería',
+deportes: 'Deportes',
+'educacion fisica': 'Deportes',
+'matematicas y ciencias': 'Matemáticas y ciencias',
+'matematicas/ciencias': 'Matemáticas y ciencias',
+artes: 'Artes',
+arte: 'Artes',
+administration: 'Administración',
+administracion: 'Administración',
+'aulas generales': 'Aulas generales'
+};
+const normalizeCategory = (category) => {
+const key = category.trim()
+.normalize('NFD')
+.replace(/[\u0300-\u036f]/g, '')
+.toLocaleLowerCase('es');
+return CATEGORY_NAMES[key] || category.trim();
+};
+const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (character) => ({
+'&': '&amp;',
+'<': '&lt;',
+'>': '&gt;',
+'"': '&quot;',
+"'": '&#39;'
+})[character]);
+const sanitizeMaterialName = (value) => value.replace(/[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]/g, '');
+const ROLE_PASSWORDS = {
+Administrador: 'V1llafan3.',
+Supervisor: 'C0leg10.'
+};
+const authView = document.getElementById('authView');
+const appView = document.getElementById('appView');
+const authForm = document.getElementById('authForm');
+const message = document.getElementById('message');
+const getInventory = () => JSON.parse(localStorage.getItem(INVENTORY_KEY) || '[]');
+const saveInventory = (items) => localStorage.setItem(INVENTORY_KEY, JSON.stringify(items));
+const getLots = () => JSON.parse(localStorage.getItem(LOTS_KEY) || '[]');
+const saveLots = (items) => localStorage.setItem(LOTS_KEY, JSON.stringify(items));
+if (localStorage.getItem(LOTS_KEY) === null) {
+const previousLots = getInventory()
+.filter((item) => item.lot)
+.map(({ name, category, quantity, unit, lot, date, notes }) => ({
+name,
+category,
+quantity,
+unit,
+lot,
+date,
+notes
+}));
+saveLots(previousLots);
+}
+let currentUser = null;
+let sortAscending = true;
+let editingInventoryIndex = null;
+const renderInventory = () => {
+const items = getInventory();
+const inventoryBody = document.getElementById('inventoryBody');
+const searchTerm = document.getElementById('searchInventory').value.trim().toLocaleLowerCase('es');
+const selectedCategory = document.getElementById('categoryFilter').value;
+const visibleItems = items
+.map((item, index) => ({ ...item, index }))
+.filter((item) => `${item.name} ${item.category}`.toLocaleLowerCase('es').includes(searchTerm))
+.filter((item) => selectedCategory === 'all' || normalizeCategory(item.category) === selectedCategory)
+.sort((first, second) => first.name.localeCompare(second.name, 'es') * (sortAscending ? 1 : -1));
+inventoryBody.innerHTML = visibleItems.map((item) => {
+const category = normalizeCategory(item.category);
+const adminActions = currentUser.role === 'Administrador'
+? `<div class="inventory-row-actions">
+<div class="stock-actions">
+<button class="stock-action" data-action="decrease" data-index="${item.index}" type="button" aria-label="Reducir ${escapeHTML(item.name)}">−</button>
+<span class="stock-quantity">${escapeHTML(item.quantity)}</span>
+<button class="stock-action" data-action="increase" data-index="${item.index}" type="button" aria-label="Aumentar ${escapeHTML(item.name)}">+</button>
+</div>
+<button class="edit-item" data-action="edit" data-index="${item.index}" type="button" aria-label="Editar ${escapeHTML(item.name)}">Editar</button>
+<button class="delete-item stock-action" data-action="delete" data-index="${item.index}" type="button" aria-label="Eliminar ${escapeHTML(item.name)}">×</button>
+</div>`
+: `<span class="stock-quantity">${escapeHTML(item.quantity)}</span>`;
+return `
+<tr>
+<td><div class="material-name">${escapeHTML(item.name)}</div></td>
+<td>
+<span class="category-tag">
+<span aria-hidden="true">${CATEGORY_ICONS[category] || '📦'}</span>
+${escapeHTML(category)}
+</span>
+</td>
+<td>
+<span class="stock-status">${Number(item.quantity) > 0 ? '✓ Disponible' : 'Agotado'}</span>
+</td>
+<td>${adminActions}</td>
+</tr>`;
+}).join('');
+const emptyInventory = document.getElementById('emptyInventory');
+emptyInventory.textContent = items.length && (searchTerm || selectedCategory !== 'all')
+? 'No encontramos materiales con esos filtros.'
+: 'Aún no hay materiales registrados.';
+emptyInventory.classList.toggle('hidden', visibleItems.length > 0);
+document.getElementById('materialCount').textContent = items.length;
+document.getElementById('unitCount').textContent = items.reduce((total, item) => total + Number(item.quantity), 0);
+document.getElementById('lotCount').textContent = getLots().length;
+const categoryCounts = items.reduce((counts, item) => {
+const category = normalizeCategory(item.category);
+counts[category] = (counts[category] || 0) + 1;
+return counts;
+}, {});
+document.getElementById('categoryCounts').innerHTML = CATEGORY_ORDER.map((category) => {
+const count = categoryCounts[category] || 0;
+return `
+<article class="category-count">
+<span class="category-count-name">
+<span aria-hidden="true">${CATEGORY_ICONS[category]}</span>
+${escapeHTML(category)}
+</span>
+<strong>${count}</strong>
+<span class="category-count-label">${count === 1 ? 'material' : 'materiales'}</span>
+</article>`;
+}).join('');
+};
+const renderEntries = () => {
+const lots = getLots();
+document.getElementById('entryList').innerHTML = lots
+.map((lot, index) => ({ lot, index }))
+.reverse()
+.map(({ lot, index }) => {
+const materials = lot.items || [{ name: lot.name, category: lot.category, quantity: lot.quantity }];
+const sortedMaterials = materials
+.map((item) => ({ ...item, category: normalizeCategory(item.category) }))
+.sort((first, second) => {
+const firstCategory = CATEGORY_ORDER.indexOf(first.category);
+const secondCategory = CATEGORY_ORDER.indexOf(second.category);
+return (firstCategory === -1 ? CATEGORY_ORDER.length : firstCategory)
+- (secondCategory === -1 ? CATEGORY_ORDER.length : secondCategory)
+|| first.category.localeCompare(second.category, 'es')
+|| first.name.localeCompare(second.name, 'es');
+});
+const groupedMaterials = sortedMaterials.reduce((groups, item) => {
+if (!groups.length || groups[groups.length - 1].category !== item.category) {
+groups.push({ category: item.category, items: [] });
+}
+groups[groups.length - 1].items.push(item);
+return groups;
+}, []);
+const deleteButton = currentUser.role === 'Administrador'
+? `<button class="delete-entry" data-lot-index="${index}" type="button" aria-label="Eliminar lote ${escapeHTML(lot.lot)}" title="Eliminar lote">×</button>`
+: '';
+const materialGroups = groupedMaterials.map((group) => `
+<section class="entry-category">
+<h4>
+<span aria-hidden="true">${CATEGORY_ICONS[group.category] || '📦'}</span>
+${escapeHTML(group.category)}
+</h4>
+<ul class="entry-materials">
+${group.items.map((item) => `
+<li>
+<span>${escapeHTML(item.name)}</span>
+<span>${escapeHTML(item.quantity)} recibidos</span>
+</li>`).join('')}
+</ul>
+</section>`).join('');
+return `
+<article class="entry">
+<div class="entry-heading">
+<h3>Lote ${escapeHTML(lot.lot)}</h3>
+${deleteButton}
+</div>
+<p>Fecha de llegada: ${escapeHTML(lot.date)}</p>
+${materialGroups}
+${lot.notes ? `<p>${escapeHTML(lot.notes)}</p>` : ''}
+</article>`;
+}).join('');
+document.getElementById('emptyEntries').classList.toggle('hidden', lots.length > 0);
+};
+const createMaterialRow = () => {
+const row = document.createElement('div');
+row.className = 'material-row';
+row.innerHTML = `
+<label class="field">
+Categoría
+<select class="lot-material-category" required>
+<option value="" disabled selected>Selecciona una categoría</option>
+${Object.entries(CATEGORY_ICONS).map(([category, icon]) => `<option value="${category}">${icon} ${category}</option>`).join('')}
+</select>
+</label>
+<label class="field">
+Material
+<input class="lot-material-name" type="text" minlength="3" pattern="(?=(?:.*[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]){3})[A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]+" title="Usa al menos 3 letras; solo se permiten letras y espacios." placeholder="Ej. Marcadores" required>
+</label>
+<label class="field">
+Cantidad
+<input class="lot-material-quantity" type="number" min="1" placeholder="0" required>
+</label>
+<button class="remove-material" type="button" aria-label="Quitar material">×</button>`;
+return row;
+};
+document.addEventListener('input', (event) => {
+if (!event.target.matches('#inventoryName, .lot-material-name')) return;
+const sanitizedName = sanitizeMaterialName(event.target.value);
+if (event.target.value !== sanitizedName) event.target.value = sanitizedName;
+});
+const materialRows = document.getElementById('materialRows');
+const updateMaterialRemoveButtons = () => {
+const rows = materialRows.querySelectorAll('.material-row');
+rows.forEach((row) => {
+const removeButton = row.querySelector('.remove-material');
+removeButton.disabled = rows.length === 1;
+});
+};
+materialRows.append(createMaterialRow());
+updateMaterialRemoveButtons();
+document.getElementById('addLotMaterial').addEventListener('click', () => {
+materialRows.append(createMaterialRow());
+updateMaterialRemoveButtons();
+});
+materialRows.addEventListener('click', (event) => {
+const button = event.target.closest('.remove-material');
+if (!button || materialRows.children.length === 1) return;
+button.closest('.material-row').remove();
+updateMaterialRemoveButtons();
+});
+const showApp = (user) => {
+currentUser = user;
+authView.classList.add('hidden');
+appView.classList.remove('hidden');
+const isSupervisor = user.role === 'Supervisor';
+document.getElementById('addMaterialButton').classList.toggle('hidden', isSupervisor);
+document.getElementById('materialForm').closest('.panel').classList.toggle('hidden', isSupervisor);
+document.getElementById('userName').textContent = user.role;
+document.getElementById('avatar').textContent = user.role.charAt(0);
+const schoolCycleInput = document.getElementById('schoolCycleInput');
+schoolCycleInput.value = getSchoolCycle();
+schoolCycleInput.readOnly = isSupervisor;
+document.getElementById('materialDate').value = new Date().toISOString().slice(0, 10);
+renderInventory();
+renderEntries();
+};
+document.getElementById('addMaterialButton').addEventListener('click', () => {
+if (currentUser.role !== 'Administrador') return;
+editingInventoryIndex = null;
+document.getElementById('inventoryItemForm').reset();
+document.getElementById('inventoryDialogTitle').textContent = 'Añadir al inventario general';
+document.getElementById('inventoryDialogCopy').textContent = 'Se agregará directamente al inventario, sin crear un registro de llegada.';
+document.getElementById('inventoryQuantityField').classList.remove('hidden');
+document.getElementById('inventoryQuantity').disabled = false;
+document.getElementById('saveInventoryItem').textContent = 'Agregar al inventario';
+document.getElementById('inventoryDialog').showModal();
+});
+document.getElementById('closeInventoryDialog').addEventListener('click', () => document.getElementById('inventoryDialog').close());
+document.getElementById('cancelInventoryDialog').addEventListener('click', () => document.getElementById('inventoryDialog').close());
+const getSchoolCycle = () => {
+const savedCycle = localStorage.getItem(SCHOOL_CYCLE_KEY);
+if (!savedCycle) return '2024 - 2025';
+try {
+const parsedCycle = JSON.parse(savedCycle);
+if (typeof parsedCycle === 'string') return parsedCycle;
+if (parsedCycle?.start && parsedCycle?.end) return `${parsedCycle.start} - ${parsedCycle.end}`;
+} catch {
+return savedCycle;
+}
+return '2024 - 2025';
+};
+const saveSchoolCycle = (input) => {
+if (currentUser?.role !== 'Administrador') return;
+const match = input.value.trim().match(/^(\d{4})\s*[-–]\s*(\d{4})$/);
+if (!match || Number(match[2]) !== Number(match[1]) + 1) return false;
+const schoolCycle = `${match[1]} - ${match[2]}`;
+input.value = schoolCycle;
+localStorage.setItem(SCHOOL_CYCLE_KEY, JSON.stringify(schoolCycle));
+return true;
+};
+document.getElementById('schoolCycleInput').addEventListener('input', (event) => saveSchoolCycle(event.currentTarget));
+document.getElementById('schoolCycleInput').addEventListener('change', (event) => {
+if (!saveSchoolCycle(event.currentTarget)) event.currentTarget.value = getSchoolCycle();
+});
+authForm.addEventListener('submit', (event) => {
+event.preventDefault();
+const role = document.getElementById('role').value;
+const password = document.getElementById('password').value;
+if (ROLE_PASSWORDS[role] !== password) return showMessage('La contraseña no es correcta para este rol.');
+const user = { role };
+localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+showApp(user);
+});
+const showMessage = (text) => {
+message.textContent = text;
+message.className = 'message';
+};
+const changeSection = (viewId) => {
+document.querySelectorAll('.nav-button').forEach((navButton) => {
+navButton.classList.toggle('active', navButton.dataset.view === viewId);
+});
+document.querySelectorAll('.view').forEach((view) => {
+view.classList.toggle('hidden', view.id !== viewId);
+});
+};
+document.querySelectorAll('.nav-button').forEach((button) => {
+button.addEventListener('click', () => changeSection(button.dataset.view));
+});
+document.getElementById('searchInventory').addEventListener('input', renderInventory);
+document.getElementById('categoryFilter').addEventListener('change', renderInventory);
+document.getElementById('sortInventory').addEventListener('click', (event) => {
+sortAscending = !sortAscending;
+event.currentTarget.textContent = `Ordenar ${sortAscending ? 'A–Z' : 'Z–A'}`;
+renderInventory();
+});
+document.getElementById('inventoryBody').addEventListener('click', (event) => {
+const button = event.target.closest('button[data-action]');
+if (!button || currentUser.role !== 'Administrador') return;
+const index = Number(button.dataset.index);
+const updatedItems = getInventory();
+if (button.dataset.action === 'edit') {
+const item = updatedItems[index];
+if (!item) return;
+editingInventoryIndex = index;
+document.getElementById('inventoryName').value = item.name;
+document.getElementById('inventoryCategory').value = normalizeCategory(item.category);
+document.getElementById('inventoryDialogTitle').textContent = 'Editar artículo del inventario';
+document.getElementById('inventoryDialogCopy').textContent = 'Cambia el nombre o la categoría. La cantidad actual se conservará.';
+document.getElementById('inventoryQuantityField').classList.add('hidden');
+document.getElementById('inventoryQuantity').disabled = true;
+document.getElementById('saveInventoryItem').textContent = 'Guardar cambios';
+document.getElementById('inventoryDialog').showModal();
+return;
+}
+if (button.dataset.action === 'delete') updatedItems.splice(index, 1);
+else {
+const nextQuantity = Number(updatedItems[index].quantity) + (button.dataset.action === 'increase' ? 1 : -1);
+updatedItems[index].quantity = String(Math.max(0, nextQuantity));
+}
+saveInventory(updatedItems);
+renderInventory();
+});
+document.getElementById('entryList').addEventListener('click', (event) => {
+const button = event.target.closest('button[data-lot-index]');
+if (!button || currentUser.role !== 'Administrador') return;
+const lots = getLots();
+lots.splice(Number(button.dataset.lotIndex), 1);
+saveLots(lots);
+renderEntries();
+renderInventory();
+});
+document.getElementById('inventoryItemForm').addEventListener('submit', (event) => {
+event.preventDefault();
+if (currentUser.role !== 'Administrador') return;
+const items = getInventory();
+const updatedItem = {
+name: document.getElementById('inventoryName').value.trim(),
+category: normalizeCategory(document.getElementById('inventoryCategory').value)
+};
+if (editingInventoryIndex === null) {
+updatedItem.quantity = document.getElementById('inventoryQuantity').value;
+saveInventory([...items, updatedItem]);
+} else {
+if (!items[editingInventoryIndex]) return;
+items[editingInventoryIndex] = { ...items[editingInventoryIndex], ...updatedItem };
+saveInventory(items);
+}
+editingInventoryIndex = null;
+event.target.reset();
+document.getElementById('inventoryDialog').close();
+renderInventory();
+});
+document.getElementById('materialForm').addEventListener('submit', (event) => {
+event.preventDefault();
+if (currentUser.role !== 'Administrador') return;
+const arrival = {
+items: [...materialRows.querySelectorAll('.material-row')].map((row) => ({
+name: row.querySelector('.lot-material-name').value.trim(),
+category: normalizeCategory(row.querySelector('.lot-material-category').value),
+quantity: row.querySelector('.lot-material-quantity').value
+})),
+lot: document.getElementById('materialLot').value.trim(),
+date: document.getElementById('materialDate').value,
+notes: document.getElementById('materialNotes').value.trim()
+};
+saveLots([...getLots(), arrival]);
+event.target.reset();
+materialRows.replaceChildren(createMaterialRow());
+updateMaterialRemoveButtons();
+document.getElementById('materialDate').value = new Date().toISOString().slice(0, 10);
+document.getElementById('inventoryMessage').textContent = 'Listo, se registró la llegada. El inventario general sigue igual.';
+document.getElementById('inventoryMessage').className = 'message success';
+renderInventory();
+renderEntries();
+});
+document.getElementById('logoutButton').addEventListener('click', () => {
+localStorage.removeItem(SESSION_KEY);
+appView.classList.add('hidden');
+authView.classList.remove('hidden');
+authForm.reset();
+});
+const savedSession = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+if (savedSession && ROLE_PASSWORDS[savedSession.role]) showApp(savedSession);
+else localStorage.removeItem(SESSION_KEY);
+</script>
+</body>
+</html>
